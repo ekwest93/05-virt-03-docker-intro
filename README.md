@@ -59,6 +59,20 @@ Hey, Netology
 12. Удалите запущенный контейнер "custom-nginx-t2", не останавливая его.(воспользуйтесь --help или google)
 
 В качестве ответа приложите скриншоты консоли, где видно все введенные команды и их вывод.
+## Ответ 
+
+<img width="1046" height="606" alt="image" src="https://github.com/user-attachments/assets/d553d1ac-9f11-4dbe-9aad-55f3bb4ad02b" />
+<img width="1837" height="123" alt="image" src="https://github.com/user-attachments/assets/3b2999b9-4a21-4cec-bd7b-ac6b57e0d58a" />
+
+Контейнер остановился потому, что процесс nginx (главный процесс с PID 1 внутри контейнера) получил сигнал SIGINT (прерывание) при нажатии Ctrl-C. В Docker, когда мы подключаемся через docker attach, сигналы с терминала (например, Ctrl-C) передаются главному процессу контейнера. Nginx, получив этот сигнал, завершил свою работу, что привело к остановке контейнера, так как главный процесс завершился.
+
+<img width="1490" height="522" alt="image" src="https://github.com/user-attachments/assets/31a68545-ac5c-492a-b032-5555284a31c2" />
+<img width="881" height="220" alt="image" src="https://github.com/user-attachments/assets/0bdc574c-dfdc-4b6a-818c-795e7a82710f" />
+
+Проблема в том, что мы изменили порт, который слушает nginx внутри контейнера, с 80 на 81, но проброс порта (-p 127.0.0.1:8080:80) остался настроен на порт 80 контейнера. Теперь трафик, приходящий на порт 8080 хоста, перенаправляется на порт 80 контейнера, но nginx там ничего не слушает. В результате получаем ошибку подключения.
+
+<img width="853" height="61" alt="image" src="https://github.com/user-attachments/assets/e4b05a20-4d63-4da6-ba24-fffed74f83e1" />
+
 
 ## Задача 4
 
@@ -71,6 +85,7 @@ Hey, Netology
 
 
 В качестве ответа приложите скриншоты консоли, где видно все введенные команды и их вывод.
+<img width="1842" height="785" alt="image" src="https://github.com/user-attachments/assets/33b46ee3-7420-4e48-b697-dfb71b24556e" />
 
 
 ## Задача 5
@@ -121,6 +136,16 @@ services:
 В качестве ответа приложите скриншоты консоли, где видно все введенные команды и их вывод, файл compose.yaml , скриншот portainer c задеплоенным компоузом.
 
 ---
+<img width="1166" height="885" alt="image" src="https://github.com/user-attachments/assets/ba478147-dc83-4cf4-8757-8d736632a253" />
+<img width="1839" height="363" alt="image" src="https://github.com/user-attachments/assets/2678a446-8b7d-400f-9e2f-b7dc5a74ec56" />
+<img width="1638" height="600" alt="image" src="https://github.com/user-attachments/assets/5ed344a6-ac56-49c7-8d7d-6dd61bb9e711" />
+<img width="797" height="736" alt="image" src="https://github.com/user-attachments/assets/a4e67217-9949-4bc7-8de8-d9a774bf7d4c" />
+
+WARN[0000] Found orphan containers ([task5-portainer-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+
+Ошибка указывает на то, что существуют контейнеры, которые не соответствуют текущему составу docker-compose.yaml.
+
+Выполнил docker compose down --remove-orphans.
 
 ### Правила приема
 
